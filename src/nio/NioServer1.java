@@ -120,10 +120,12 @@ public class NioServer1 {
 			e.printStackTrace();
 		}
 		
-		String responseMsg = message + new Date() + "<--cc--";
-		ByteBuffer outBuffer = ByteBuffer.wrap(responseMsg.getBytes());
-		channel.write(outBuffer);// 将消息回送给客户端
-		System.out.println("SS服务端发送00信息：" + responseMsg);
+		if(!"".equals(msg)){
+			String responseMsg = message + new Date() + "<--cc--";
+			ByteBuffer outBuffer = ByteBuffer.wrap(responseMsg.getBytes());
+			channel.write(outBuffer);// 将消息回送给客户端
+			System.out.println("SS服务端发送00信息：" + responseMsg);
+		}
 	}
 
 	/**

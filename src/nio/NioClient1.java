@@ -72,7 +72,15 @@ public class NioClient1 {
 	public void listen() throws IOException {
 		// 轮询访问selector
 		while (true) {
-			selector.select();
+			try{
+				if(this.selector.isOpen()){
+					selector.select();
+				}else{
+					break;
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 			// 获得selector中选中的项的迭代器
 			Iterator ite = this.selector.selectedKeys().iterator();
 			while (ite.hasNext()) {
@@ -139,8 +147,8 @@ public class NioClient1 {
 	        System.out.println("CC客户端发送00信息：" + requestMsg);
         }else{
         	System.out.println("Client have send：" + temp + " times,and disconnection!");
-        	//channel.close();
-        	//this.selector.close();
+        	channel.close();
+        	this.selector.close();
         }
 	}
 

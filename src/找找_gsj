@@ -1,0 +1,448 @@
+1.metaq集群启动报错  java.rmi.server.ExportException: Port already in use: 9123; n
+todo:修改bin下的env.sh对应的JMX_PORT，最好为server_port + 1000
+
+2.zookeeper 集群：http://www.blogjava.net/hello-yun/archive/2012/05/03/377250.html
+          安装：http://blog.csdn.net/gudaoqianfu/article/details/7327191
+a.
+我topic下是这样设置的 ，可是队列里现在还有3天前的数据，为什么呢
+煮酒论咖啡(7276815)  9:59:51
+你的数据文件大小默认为一个G。删除策略只删除之前的.meat文件，如果你只有一个，那么不会删除
+交谈中请勿轻信汇款、中奖信息、陌生电话，勿使用外挂软件。
+
+dennis(477607151)  13:20:51
+如果只有一个当前正在写入的文件，不会删除
+天晴(70190948)  14:22:06
+一个当前写的文件是不是代表  .meta文件？
+我目录下已经有100多个这样的文件了。
+dennis(477607151)  14:32:42
+是.meta
+dennis(477607151)  14:32:58
+判断是不是超过三天，是根据last modified，文件的上次修改时间
+天晴(70190948)  14:47:05
+原来是其他topic 的crond表达式写错了 把这个也影响到了
+天晴(70190948)  14:47:20
+我用的控制台reload 
+dennis(477607151)  14:48:53
+哦，是公用一个trigger
+dennis(477607151)  14:49:03
+公用一个job
+dennis(477607151)  14:49:09
+trigger不同
+
+
+
+3.缺少字段：OrderSeq ShareUuid  SplName  CategoryName  ShareDocid
+
+4.用google浏览器获取ga的cookie:Developer Tools --> Network(name:getData?key=xxx)-->Headers(cookie)
+
+5.kill -9 进程号
+
+6.root密码找回sudo passwd root 输入你安装时用户的密码，设置root密码。
+
+7. <listener>
+        <listener-class>
+            com.izenesoft.servlet.MetaQCreate
+        </listener-class>
+    </listener>
+
+8.解决远程ssh连接linux中文乱码 
+export LANG=UTF-8
+
+9.jmeter使用指南
+http://www.ibm.com/developerworks/cn/opensource/os-pressiontest/
+参数含义：http://www.51testing.com/?uid-116228-action-viewspace-itemid-238479
+
+10.java反射执行效率
+http://www.blogjava.net/stone2083/archive/2010/09/15/332065.html
+
+./storm jar storm-test-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.larry.wordcount.WordCountTopology
+storm jar test_gsj.jar com.larry.wordcount.WordCountTopology
+
+mvn -f m2-pom.xml compile exec:java -Dexec.classpathScope=compile -Dexec.mainClass=storm.starter.WordCountTopology
+mvn -f pom.xml package
+
+mvn clean assembly:assembly -Dmaven.test.skip=true
+11.查看文件大小：
+	du -h
+        du -sh *
+查看磁盘大小：
+        df -lh
+
+12.storm 日志
+grep world worker-6701.log
+
+152(启动nimbus的为主机，其他为从机)：
+./storm nimbus >/dev/null 2>&1 &
+./storm supervisor >/dev/null 2>&1 &
+./storm ui >/dev/null 2>&1 &
+
+162(从机):
+./storm supervisor >/dev/null 2>&1 &
+
+storm系统配置：
+vi /etc/hosts  host与IP的映射关系
+jzmq和zeromq只需要编译即可
+
+storm jar test_gsj.jar com.larry.wordcount.WordCountTopology
+storm jar plugin-storm-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.b5m.plugin.test.PluginTopology
+
+
+13.查看文件系统类型
+mount或
+df -lhT
+
+14.查找淘宝源码
+http://code.taobao.org/
+MetaQ:killme2008@gmail.com
+
+15.maven
+http://search.maven.org/#browse
+
+16.volatile
+对于volatile修饰的变量，jvm虚拟机只是保证从主内存加载到线程工作内存的值是最新的
+eg:
+http://www.cnblogs.com/aigongsi/archive/2012/04/01/2429166.html
+
+
+17.
+mongo 10.10.99.182/183:5586
+rs.slaveOk();
+结果：plugin_version_report
+      pluginLog_js_new
+      pluginLog_js_error
+
+db.dropDatabase()
+
+mongodump -h 10.10.99.183 --port 5586  -d b5m_plugin_analysis -c reportPlatformModule -o reportPlatformModule.dat 
+mongorestore -h 10.10.99.136 --port 5586  -db b5m_plugin_analysis --drop -c reportPlatformModule  reportPlatformModule.dat/b5m_plugin_analysis/reportPlatformModule.bson
+分页：
+Query.limit();
+
+18.重命名
+mv metaq-server1 metaq-server2
+cpu信息：cat /proc/cpuinfo
+
+19.
+那就创建一个out吧PrintWriter out = response.getWriter().
+
+20.git
+a.创建分支
+创建分支：git branch testing
+改变分支：git checkout testing
+以上2条等价于：git checkout -b testing
+
+b.删除分支
+git branch -d testing
+
+21.
+关于tomcat Session的问题通常是采用memcached，或者采用nginx_upstream_jvm_route ，他是一个 Nginx 的扩展模块，用来实现基于 Cookie 的 Session Sticky 的功能。如果tomcat过多不建议session同步，server间相互同步session很耗资源，高并发环境容易引起Session风暴。请根据自己应用情况合理采纳session解决方案。
+
+22.导入maven工程
+import-->Exeisting Maven Projects
+MetaQ删除策略相关：Quartz中时间表达式的设置-----corn表达式
+
+23.
+jstat -gc 19497 5000
+jmap -histo 19497 > jamp.log
+
+24.storm-spring整合
+http://macrochen.iteye.com/blog/1408436
+
+25.ggts 假死
+1.剪切 /home/gsj/workspace1/.metadata/.plugins/org.eclipse.core.resources/.projects 目录下对应工程的目录（先备份）
+2.启动ggts,关闭掉所有打开的java文件
+3.恢复1中的文件，启动ggts
+
+26.memcached启动
+./memcached -d -m 1024 -l 172.16.3.22 -p 11221
+
+27.TAO API && CMS
+taoapi.stage.bang5mai.com
+taoapi.prod.bang5mai.com
+taoapi.b5m.com
+http://sa1.b5m.com:58080/B5MCMS/
+http://cms.stage.bang5mai.com/B5MCMS/
+
+TAO API:
+prod---> http://10.10.99.101:5556/login        taoapi        taoapi123
+b5m--->http://10.10.99.101:5658/login	taoapi taoapizwFhYxsw
+
+1. 部署平台地址：
+http://10.10.99.101:7160/accounts/login/
+
+user:shengjie
+passwd:shengjie2wsx
+
+2. stage环境
+
+ip:172.16.11.107
+user:lscm
+passwd:izene123
+
+路径：/usr/local/websrv/tomcat_taoapi_8481
+
+PROD=>B5M部署平台地址：
+http://10.10.99.101:8210/accounts/login/
+
+user:duanyu
+passwd:duanyu4rfv
+
+http://taoapi.prod.bang5mai.com/getLastTwentyGoods、getTopTwentyGoods
+http://taoapi.stage.bang5mai.com/getTaoListBySf1cat   {"sf1Category":"服装服饰>男装>风衣","size":8}
+http://taoapi.stage.bang5mai.com/getTaoListByCategoryId   {"categoryId":"4","type":"","size":10}  categoryId(1-7)
+http://taoapi.stage.bang5mai.com/getTaoListByKeywords   {"keyWord":"鞋","type":"2","size":10}
+http://taoapi.b5m.com/getTradeInfoByUid
+{"conditions":[{"field":"outer_code","opr":"=","value":"1b4b59d15f824e0f93665c9ca049e151"}],"pageNo":1,"pageSize":10,"sort":"create_time","sortType":"desc"}
+
+http://taoapi.stage.bang5mai.com/getYouGoods
+{"conditions":[{"field":"fromCity","opr":"=","value":"上海"},{"field":"youType","opr":"=","value":"0"}],"pageNo":1,"pageSize":10,"sort":"addTime","sortType":"desc"} 
+
+http://taoapi.stage.bang5mai.com/getYouCategoryCount、getYouCitys
+
+
+
+TAO Stage:
+http://10.10.99.204
+
+TAO PROD:
+http://10.10.99.106:5552/login   tao/tao123
+http://10.10.99.106:7160/accounts/login/
+
+user:shengjie
+passwd:shengjie2wsx
+
+
+YOU Stage：
+ip:172.16.11.204
+user:lscm
+passwd:izene123
+/usr/local/websrv/tomcat_you_8581
+
+YOU PROD:
+http://10.10.99.101:5555/login  you/you123
+http://10.10.99.101:7160/accounts/login/
+
+user:shengjie
+passwd:shengjie2wsx
+
+YOU 线上日志：
+10.10.99.102:logs\you
+
+TIAO:
+http://10.10.99.101:5552/login  tiao  tiao123 
+
+GWM web
+Stege:
+172.16.11.69
+用户名:lscm  密码:123456
+Tomcat路径:/usr/local/websrv/
+
+Prod:
+10.10.99.106:11118/login
+用户名:gwmeiplus
+密码:gwmeiplus123
+线上Memcached:10.10.100.19:11211
+plus.gwmei.stage.bang5mai.com
+
+MetaQ测试：10.10.100.76，18，56：12181
+MetaQ线上：10.10.100.1，61，62：12181
+
+TAO 线上DB（readonly）:mysql -ub5m -piz3n3s0ft -h10.10.105.8
+
+压测：
+curl -s -w %{http_code}:%{time_namelookup}:%{time_connect}:%{time_starttransfer}:%{time_total} "http://10.10.100.26:8381/taoPage_2_abroadTravel"
+ssh -X shengjie.guo@10.10.99.134 gsj123
+http://taoy.stage.bang5mai.com/
+
+服务器IP：10.10.100.26
+用户名：lscm
+密码：izene123
+tomcat路径：/usr/local/websrv
+cap deploy
+
+
+NEW Memcache(Larry):172.16.5.194:11211 
+jvisualvm 查看JVM信息
+每1000ms打印一次，打印100次
+jstat -gc 29584 1000 100
+grep计数：
+grep -c "首页数据------index----" 1432.log
+
+http://10.10.99.106/charts.php  app/app123
+tao db:105
+
+http://10.10.109.3/cacti/user_admin.php  readonly:readonly
+
+线上Mem:10.10.100.14:11211
+
+27.测试环境
+数据库
+IP：10.10.105.13
+用户名：b5m
+密码：izene123
+
+tomcat
+lscm@10.10.99.102:/usr/local/websrv/tomcat_tao_8381
+用户名：lscm
+密码：izene123
+memcached  8G
+10.10.100.114:11211
+
+bug list:http://172.16.5.33  用户名：Shengjie   密码：1
+python -m SimpleHTTPServer
+
+
+28.针对TAO DB LOCK过多导致tomcat挂掉解决办法：先杀掉所有的 db lock,然后立即重启逐个重启所有的tomcat
+
+29.SELECT NOW(),CURDATE(),CURTIME();
++---------------------+------------+-----------+
+| NOW()               | CURDATE()  | CURTIME() |
++---------------------+------------+-----------+
+| 2013-07-08 09:53:30 | 2013-07-08 | 09:53:30  |
++---------------------+------------+-----------+
+
+30.百度统计：izene-tao/izene-tao
+重命名：mv 源文件 目标文件
+查找当前目录下www.b5m.com的文件：grep -Fnr www.b5m.com ./
+vim 替换：:%s/www.b5m.com/old.b5m.com/g（等同于 :g/vivian/s//sky/g） 替换每一行中所有 vivian 为 sky
+mysql 导出数据：mysqldump  -h10.10.99.135 -ub5m -pizene123  --database b5m_tao --tables tao_topic > 123.sql
+http://tongji.baidu.com/web/5855401/overview/sole?siteId=3026786 
+B2C-小玄子 10:12:16 
+帐号：b5m2013
+密码：luckyYINYIN7
+用户名：来来来啊    密码：870625 
+
+31.Sphinx 安装 
+ ./configure --prefix=/usr/local/sphinx/ --with-mysql-lib=/usr/lib/mysql --with-mysql-includes=/usr/include/mysql --with-iconv --enable-id64
+/usr/local/sphinx/bin/search -i index -q keyword
+./configure --prefix=/usr/local/coreseek --with-mysql-lib=/usr/lib/mysql --with-mysql-includes=/usr/include/mysql --with-mmseg=/usr/local/mmseg3 --with-mmseg-includes=/usr/local/mmseg3/include/mmseg/ --with-mmseg-libs=/usr/local/mmseg3/lib/
+
+32 Dev branch
+git reset --hard 5d673221a804d706ccce6eb8fed4a5e4030345ef 回滚至3fac1bbd51eaed1eb5af822f1ed6e80bb26e799d版本
+
+
+33.
+10.10.100.14:11211 10.10.100.19:11411 10.10.100.55:11411
+https://github.com/nipao/b5m/blob/master/doc/html.md#3-%E6%90%9C%E7%B4%A2%E8%87%AA%E5%8A%A8%E8%81%94%E6%83%B3%E6%8F%90%E7%A4%BA%E5%8A%9F%E8%83%BD
+maven update:
+project--->maven--->update project--->force
+
+34. TAO && YOU Docs
+TAO：https://docs.google.com/a/b5m.com/spreadsheet/ccc?key=0Ap9Il6M9clf6dGM2dkxpUFdJaWdyWm1JamlyRDk2NVE#gid=2
+YOU：https://docs.google.com/a/b5m.com/spreadsheet/ccc?key=0Ap9Il6M9clf6dGM2dkxpUFdJaWdyWm1JamlyRDk2NVE#gid=4
+
+计算2点之间距离（经纬度）：http://www.cnblogs.com/ycsfwhh/archive/2010/12/20/1911232.html
+查找（经纬度）：http://www.gpsspg.com/maps.htm
+google api(通过地点获取坐标):http://maps.google.com/maps/api/geocode/json?address=上海八佰伴&sensor=false
+https://developers.google.com/maps/documentation/javascript/geocoding?hl=zh-CN
+https://developers.google.com/maps/documentation/geocoding/index?hl=zh-CN
+http://api.map.baidu.com/place/v2/search?&query=%E9%93%B6%E8%A1%8C&region=%E6%B5%8E%E5%8D%97&output=json&ak=60b9d75a06c0d53bf0ec47bf5b3bd773
+
+172.16.11.208:11211
+http://www.bizhiyun.com/tag/19201280
+
+
+35.
+搜索结果页：class="filter-text l ml10 filter-text2 J-tip"
+内页：class="filter-text l ml10 filter-text-short J-tip"
+ placeholder="酒店名、地标、商圈，支持组合搜索"
+http://jos.jd.com/
+
+36.
+Git Setup:
+
+  Download and Install Git
+  git config --global user.name "shengjie.guo"
+  git config --global user.email shengjie.guo@b5m.com
+
+Permission Setup:
+
+  Upload SSH Public Key
+  Add yourself as a project developer: b5m_web_fanli Settings -> Members Tab -> New Member
+
+Repository Setup:
+
+  cd b5m-web-fanli
+  git init
+  git add .
+  git commit -m 'Initializing b5m_web_fanli repository'
+  git remote add origin git@izenesoft.cn:b5m-web-fanli.git
+  git push origin master
+
+Existing Git Repo?
+
+  cd existing_git_repo
+  git remote add origin git@izenesoft.cn:b5m-web-fanli.git
+  git push origin master
+
+
+36.
+http://10.10.99.188:8888/sf1r/documents/get
+
+{
+    "conditions":[
+        {
+            "value":"f58ba1eca299c41b7c0b73c7c5099418",
+            "property":"DOCID",
+            "operator":"="
+        }
+    ],
+    "select":[
+        {
+            "property":"DOCID"
+        },
+        {
+            "property":"Title"
+        },
+        {
+            "property":"Url"
+        },
+        {
+            "property":"Price"
+        },
+        {
+            "property":"Picture"
+        },
+        {
+            "property":"Category"
+        },
+        {
+            "property":"Source"
+        },
+        {
+            "property":"DisplayAttribute"
+        },
+        {
+            "property":"SalesAmount"
+        }
+    ],
+    "collection":"b5mo",
+    "header":{
+        "check_time":"true"
+    }
+}
+
+37.返利相关
+
+http://api.taobao.com/apitools/apiTools.htm?catId=4&apiName=taobao.item.get
+static String url = "http://gw.api.taobao.com/router/rest";
+static String appkey = "21416726";
+static String secret = "db2f0d165a42d0aa5934fd922187b6e9";
+
+是否返利：
+http://api.taobao.com/apitools/apiTools.htm?catId=38&apiName=taobao.taobaoke.rebate.authorize.get
+返利比例：
+http://api.taobao.com/apitools/apiTools.htm?catId=38&apiName=taobao.taobaoke.items.get
+
+nick、keywords、start_price、end_price过滤商品返利信息
+
+
+
+appKey=21183513
+appSecret=b88b50e9e91d64e057c1cedc1c5a8c6b
+
+
+返利API：http://club.alimama.com/read-htm-tid-5352340.html
+
+38.
+C3P0:http://www.cnblogs.com/ShaolinRong/archive/2013/02/25/2931947.html

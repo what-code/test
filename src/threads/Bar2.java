@@ -1,4 +1,5 @@
 package threads;
+
 /**
  * Title:Bar1.java
  * 
@@ -13,15 +14,15 @@ package threads;
  * @version 1.0
  */
 public class Bar2 extends Bar {
-	
-	public void execute(){
-		if(status1.equals("A")){
-			/*try {
-				Thread.sleep(9);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}*/
-			synchronized (this) {
+
+	public void execute() {
+		synchronized (this) {
+			if (status1.equals("A")) {
+				try {
+					Thread.sleep(900);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				System.out.println("--B--");
 				status1 = "B";
 			}

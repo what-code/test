@@ -17,19 +17,17 @@ public class Bar1 extends Bar {
 	// private static volatile String status;
 
 	public void execute() {
-		if (status1.equals("C") || status1.equals("")) {
-			//type1
-			/*try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}*/
-			synchronized (this) {
+		synchronized (this) {
+			if (status1.equals("C") || status1.equals("")) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
 				System.out.println("--A--");
 				status1 = "A";
 			}
-			
-			//type2
 		}
 	}
 }

@@ -166,6 +166,7 @@ http://cms.stage.bang5mai.com/B5MCMS/
 TAO API:
 prod---> http://10.10.99.101:5556/login        taoapi        taoapi123
 b5m--->http://10.10.99.101:5658/login	taoapi taoapizwFhYxsw
+       http://10.10.99.101:8210/accounts/login
 
 1. 部署平台地址：
 http://10.10.99.101:7160/accounts/login/
@@ -185,7 +186,12 @@ PROD=>B5M部署平台地址：
 http://10.10.99.101:8210/accounts/login/
 
 user:duanyu
-passwd:duanyu4rfv
+passwd:duanyu1qaz
+
+
+
+
+
 
 http://taoapi.prod.bang5mai.com/getLastTwentyGoods、getTopTwentyGoods
 http://taoapi.stage.bang5mai.com/getTaoListBySf1cat   {"sf1Category":"服装服饰>男装>风衣","size":8}
@@ -306,11 +312,7 @@ python -m SimpleHTTPServer
 查找当前目录下www.b5m.com的文件：grep -Fnr www.b5m.com ./
 vim 替换：:%s/www.b5m.com/old.b5m.com/g（等同于 :g/vivian/s//sky/g） 替换每一行中所有 vivian 为 sky
 mysql 导出数据：mysqldump  -h10.10.99.135 -ub5m -pizene123  --database b5m_tao --tables tao_topic > 123.sql
-http://tongji.baidu.com/web/5855401/overview/sole?siteId=3026786 
-B2C-小玄子 10:12:16 
-帐号：b5m2013
-密码：luckyYINYIN7
-用户名：来来来啊    密码：870625 
+
 
 31.Sphinx 安装 
  ./configure --prefix=/usr/local/sphinx/ --with-mysql-lib=/usr/lib/mysql --with-mysql-includes=/usr/include/mysql --with-iconv --enable-id64
@@ -446,3 +448,30 @@ appSecret=b88b50e9e91d64e057c1cedc1c5a8c6b
 
 38.
 C3P0:http://www.cnblogs.com/ShaolinRong/archive/2013/02/25/2931947.html
+
+39.getBean过程：
+1.WebApplicationContext webCtx = WebApplicationContextUtils.getWebApplicationContext();
+2.webCtx.getBean("hibernateTemplateForYou"))-->AbstractApplicationContext.getBean(""){getBeanFactory().getBean("")}-->AbstractRefreshableApplicationContext.getBeanFactory()-->DefaultListableBeanFactory factory;
+3.DefaultListableBeanFactory factory.getBean("")-->AbstractBeanFactory.getBean("")-->AbstractBeanFactory.doGetBean()-->AbstractBeanFactory.getObjectForBeanInstance()-->AbstractAutowireCapableBeanFactory.createBean()或者FactoryBeanRegistrySupport.getObjectFromFactoryBean()
+
+Bean在Spring容器中如果没指定作用域默认---->singleton
+
+
+40.add column
+ALTER TABLE `b5m_you`.`you_area_acronym` ADD COLUMN `is_abroad` VARCHAR(2) NULL DEFAULT 0 COMMENT '是否是 国外城市，0：国内  1：国外'  AFTER `name` ;
+
+41.从服务器下载文件
+  scp username@servername:/path/filename /tmp/local_destination
+
+Create a new repository on the command line
+touch README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/what-code/about-storm.git
+git push -u origin master
+
+42.Oracle 相关：
+执行计划： explain plan for select empno， ename from emp where empno=10；
+MySql相关：
+自动提交设置为off：set autocommit=off;

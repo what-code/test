@@ -381,48 +381,6 @@ Existing Git Repo?
 36.
 http://10.10.99.188:8888/sf1r/documents/get
 
-{
-    "conditions":[
-        {
-            "value":"f58ba1eca299c41b7c0b73c7c5099418",
-            "property":"DOCID",
-            "operator":"="
-        }
-    ],
-    "select":[
-        {
-            "property":"DOCID"
-        },
-        {
-            "property":"Title"
-        },
-        {
-            "property":"Url"
-        },
-        {
-            "property":"Price"
-        },
-        {
-            "property":"Picture"
-        },
-        {
-            "property":"Category"
-        },
-        {
-            "property":"Source"
-        },
-        {
-            "property":"DisplayAttribute"
-        },
-        {
-            "property":"SalesAmount"
-        }
-    ],
-    "collection":"b5mo",
-    "header":{
-        "check_time":"true"
-    }
-}
 
 37.返利相关
 
@@ -475,3 +433,115 @@ git push -u origin master
 执行计划： explain plan for select empno， ename from emp where empno=10；
 MySql相关：
 自动提交设置为off：set autocommit=off;
+
+43.普通java工程和web工程直接的转换
+解决步骤：
+1、进入项目目录，可看到.project文件，打开。
+2、找到<natures>...</natures>代码段。
+3、在第2步的代码段中加入如下标签内容并保存：
+
+<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
+<nature>org.eclipse.wst.common.modulecore.ModuleCoreNature</nature>
+<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
+
+4、在eclipse的项目上点右键，刷新项目。
+
+5、在项目上点右键，进入属性（properties）
+
+6、在左侧列表项目中点击选择“Project Facets”，在右侧选择“Dynamic Web Module”和"Java"，点击OK保存即可。
+
+44.
+10.10.100.67 STORM-0001
+10.10.100.68 STORM-0002
+10.10.100.69 STORM-0003
+10.10.100.70 STORM-0004
+10.10.100.71 STORM-0005
+
+10.10.100.78 HADOOP-MASTER
+10.10.100.58 HADOOP-BAKUP
+10.10.100.77 HADOOP-NODE1
+10.10.100.79 HADOOP-NODE2
+10.10.100.80 HADOOP-NODE3
+10.10.100.81 HADOOP-NODE4
+10.10.100.82 HADOOP-NODE5
+10.10.100.57 HADOOP-NODE6
+10.10.100.59 HADOOP-NODE7
+10.10.100.60 HADOOP-NODE8
+
+45:select max(time_date),sum(pv),sum(click) from b5m_adrs.t_keyword_record group by time_date order by time_date
+java.lang.Interable VS java.util.Iterator
+
+46 HADOOP(1.2.1)
+A.安装
+1.解压
+tar -xvf hadoop-1.2.1.tar.gz
+
+2.conf
+cd /home/gsj/Develop_Tools/tools/hadoop/hadoop-1.2.1/conf
+
+3.vim hadoop-env.sh
+并添加以下至hadoop-env.sh
+export JAVA_HOME=/home/gsj/Develop_Tools/tools/jdk/jdk1.6/jdk1.6.0_43
+export HADOOP_HOME=/home/gsj/Develop_Tools/tools/hadoop/hadoop-1.2.1
+export PATH=$PATH:$HADOOP_HOME/bin
+
+4.
+core-site.xml:
+<configuration>
+     <property>
+         <name>fs.default.name</name>
+         <value>hdfs://localhost:9000</value>
+     </property>
+	<property>
+    <name>hadoop.tmp.dir</name>
+    <value>/home/gsj/doc/hadoop/data</value>
+  </property>
+</configuration>
+
+hdfs-site.xml:
+<configuration>
+  <property>
+    <name>dfs.replication</name>
+    <value>1</value>
+  </property>
+</configuration>
+
+mapred-site.xml:
+<configuration>
+     <property>
+         <name>mapred.job.tracker</name>
+         <value>localhost:9001</value>
+     </property>
+</configuration>
+
+5.source hadoop-env.sh
+
+6.格式化：hadoop namenode -format/hadoop datanode -format
+7.并启动所有./start-all.sh(若DataNode无法启动，则换hadoop.tmp.dir试试)
+8.jps:
+3114 SecondaryNameNode
+3205 JobTracker
+2867 DataNode
+2609 NameNode
+3461 TaskTracker
+2159 org.eclipse.equinox.launcher_1.3.0.v20120522-1813.jar
+3514 Jps
+
+
+B.helloworld
+1.准备文件
+./hadoop fs -ls hdfs://localhost:9000/test/input
+./hadoop fs -mkdir hdfs://localhost:9000/test/input
+./hadoop fs -copyFromLocal /home/gsj/doc/hadoop/test.txt  hdfs://localhost:9000/test/input
+
+2.执行
+./hadoop jar ../hadoop-examples-1.2.1.jar wordcount /test/input /test/output
+
+3.查看执行结果
+./hadoop fs -ls hdfs://localhost:9000/test/output
+./hadoop fs -cat hdfs://localhost:9000/test/output/part-r-00000
+
+4.将执行结果从hdfs copy到本地
+./hadoop fs -copyToLocal hdfs://localhost:9000/test/output/part-r-00000 /home/gsj/doc/doc/
+
+http://www.taobaotest.com/blogs/qa?bid=13850

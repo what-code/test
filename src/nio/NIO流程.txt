@@ -1,0 +1,16 @@
+Client(参考TimeClientHandle):
+0.SocketChannel socketChannel = SocketChannel.open();
+1.socketChannel.connect(new InetSocketAddress(host, port))
+2.socketChannel.register(selector, SelectionKey.OP_CONNECT);
+3.selector.select(),若链接成功，则通过迭代selector.selectedKeys(),用keys进行处理，(向server端发送消息，并向selector注册SelectionKey.OP_READ)
+4.接收server端返回的消息
+5.向server端发送消息
+6.重复4~5，直到不满足预设的条件
+
+Server(参考MultiplexerTimeServer):
+0.ServerSocketChannel ssc = ServerSocketChannel.open();
+1.ssc.socket().bind(new InetSocketAddress(port), 1024);
+2.ssc.register(selector, SelectionKey.OP_ACCEPT);
+3.selector.select(),则通过迭代selector.selectedKeys(),用keys进行处理
+4.if (key.isAcceptable()) ，注册sc.register(selector, SelectionKey.OP_READ);
+5.if (key.isReadable()) ，doWrite()

@@ -1,0 +1,41 @@
+﻿<head>
+<!-- 获取投放请求处理JS，建议放置在head内 -->
+<script type="text/javascript">
+(function (doc) {
+    var js = doc.createElement("script"),
+        fs = doc.getElementsByTagName("script")[0];
+    js.charset = "utf-8";
+    js.src = "http://js.miaozhen.com/mz_ad_serving.js";
+    fs.parentNode.insertBefore(js, fs);
+})(document);
+</script>
+</head>
+<body>
+......
+    <!-- 广告位所在页面位置 -->
+    <div id="MZADX_2"></div>
+    <!-- 获取具体广告位请求JS-->
+    <script type="text/javascript">
+    (function(win) {
+        var params = {};
+        params["l"] = "2";
+        params["_srv"] = "MZADX";
+	params["_callback"] = function (flag1, flag2) {
+		alert("00")
+	    // 调用媒体自定义回调函数
+            custom_callback();
+	}; 
+        __mz_rpq = win.__mz_rpq || [];
+        __mz_rpq.push(params);
+    })(window);
+    </script>
+    <!-- 媒体注册的自定义回调函数,通过该函数实现自身定制化需求 -->
+    <!-- 该函数会在秒针竞价服务器返回投放请求的响应后调用，以告之媒体该次投放请求秒针的竞价结果以及该广告位是否存在默认物料等信息 -->
+    <script type="text/javascript">
+    function custom_callback() {
+        alert("qq")
+    }
+    </script>
+......
+
+</body>

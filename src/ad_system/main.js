@@ -70,7 +70,7 @@ var b5man_params = {
 	"cookieval": "6f2349fc865f111c6e0afbf48c7ee753",
 	"ip": "116.233.23.33",
 	"firstAdId": 1184,
-	"firstUnionName": "%E7%A7%92%E9%92%88%E8%81%94%E7%9B%9F",
+	"firstUnionName": "√Î’Î¡™√À",
 	"ct": "1",
 	"cp": "0"
 };

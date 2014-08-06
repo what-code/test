@@ -10,32 +10,57 @@
 })(document);
 </script>
 </head>
+
 <body>
-......
+__ad s___
     <!-- 广告位所在页面位置 -->
-    <div id="MZADX_2"></div>
+    <div id="MZADX_1"></div>
     <!-- 获取具体广告位请求JS-->
     <script type="text/javascript">
     (function(win) {
         var params = {};
-        params["l"] = "2";
+        params["l"] = "1";
+        params["_id"] = "MZADX_1";
         params["_srv"] = "MZADX";
 	params["_callback"] = function (flag1, flag2) {
-		alert("00")
+		alert(flag1 + "--->" + flag2)
 	    // 调用媒体自定义回调函数
-            custom_callback();
+	if(!flag1){
+		custom_callback();
+	}
 	}; 
         __mz_rpq = win.__mz_rpq || [];
         __mz_rpq.push(params);
     })(window);
     </script>
+    
     <!-- 媒体注册的自定义回调函数,通过该函数实现自身定制化需求 -->
     <!-- 该函数会在秒针竞价服务器返回投放请求的响应后调用，以告之媒体该次投放请求秒针的竞价结果以及该广告位是否存在默认物料等信息 -->
     <script type="text/javascript">
     function custom_callback() {
-        alert("qq")
+        //alert("qq");
+        //document.body.removeChild(document.getElementById("MZADX_1"));
+        //var adDiv = document.createElement("div");
+        //document.getElementById('MZADX_1').innerHTML = "";
+/*var iframe = document.createElement("iframe");
+			iframe.setAttribute("width", "300");
+			iframe.setAttribute("height", "250");
+			iframe.setAttribute("marginwidth", "0", 0);
+			iframe.setAttribute("marginheight", "0", 0);
+			iframe.setAttribute("border", "0");
+			iframe.setAttribute("frameborder", "0", 0);
+			iframe.setAttribute("scrolling", "no");
+			iframe.setAttribute("allowtransparency", "true");
+			iframe.src = "http://sell.b5m.com/adexchange/adCallBack.do?siteCode=588315db88b2ee51a6cadc77bf5d4bb8&action=5_8&level=1&adId=1184";
+			var i = document.getElementById("MZADX_1");
+			if (i) {
+				i.parentNode.insertBefore(iframe, i);
+			}*/
     }
     </script>
-......
+---ad e---
 
+---ad2 s---
+<script src="http://u.xcy8.com/t/?pid=205359&show_t=2" type="text/Javascript"></script>
+---ad2 e---
 </body>

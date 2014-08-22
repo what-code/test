@@ -43,7 +43,7 @@ public class MyDistributedLock implements Watcher{
 	//当前客户端的path
 	private volatile String curPath = null;
 	
-	//当前占有锁的path
+	//比当前客户端path小的最近的node
 	private volatile String lowerPath = null;
 	
 	public String getRoot() {
@@ -92,13 +92,10 @@ public class MyDistributedLock implements Watcher{
 		init();
 	}
 	
+	/**
+	 * 初始化root
+	 */
 	private void init(){
-		/*Watcher watcher = new Watcher() {
-			public void process(WatchedEvent event) {
-				System.out.println("Receive watched event：" + event);
-			}
-		};*/
-
 		try {
 			zookeeper = new ZooKeeper(this.zkServer, 500000, this);
 			try {
@@ -131,6 +128,7 @@ public class MyDistributedLock implements Watcher{
 				return path0;
 			} else {
 				System.out.println("----create--node is not null----");
+				return finalPath;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -187,7 +185,11 @@ public class MyDistributedLock implements Watcher{
 	 * 分布式 加锁
 	 */
 	public void lock() {
-		curPath = createNode();
+		//处理重入锁的情况(默认情况下curPath == null,重入情况下curPath != null)
+		if(this.curPath == null){
+			curPath = createNode();
+		}
+		
 		if(curPath != null){
 			try {
 				List<String> list = zookeeper.getChildren(root, false);
@@ -250,7 +252,7 @@ public class MyDistributedLock implements Watcher{
 	 */
 	private void waitForLock(String lowerNode) throws KeeperException, InterruptedException{
 		if(lowerNode != null){
-			//重点——注册wather(比自己小的离自己最近的节点),唤醒自己
+			//重点——注册wather(比自己小的离自己最近的节点),在前一个比自己小的节点释放锁之后唤醒自己
 			Stat stat = zookeeper.exists(lowerNode, true);
 			if (stat != null) {
 				synchronized (mutex) {
@@ -261,10 +263,5 @@ public class MyDistributedLock implements Watcher{
 				lock();
 			}
 		}
-	}
-	
-	public static void main(String[] args){
-		String curNode = "/dl_root/lock_9";
-		System.out.println(curNode.substring(curNode.lastIndexOf("/") + 1).split("_")[1]);
 	}
 }

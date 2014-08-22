@@ -20,15 +20,23 @@ public class TestMyDLock {
 	/**
 	 * 处理业务逻辑
 	 */
-	public static void doAction(ZooKeeper zookeeper){
-		System.out.println("-----doAction() begin------" + zookeeper.getSessionId());
+	public static void doAction(MyDistributedLock lock){
+		System.out.println("-----doAction() begin------" + lock.getZookeeper().getSessionId());
 		try {
 			System.out.println("------------is doAction()...");
-			Thread.sleep(100000 + RandomUtils.nextInt(2000));
+			Thread.sleep(10000 + RandomUtils.nextInt(2000));
+			
+			//测试可重入锁
+			if("/dl_root/lock_0000000056".equals(lock.getCurPath())){
+				lock.lock();
+				System.out.println("------------test Reentrant lock...");
+				Thread.sleep(1000 + RandomUtils.nextInt(2000));
+				lock.unlock();
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		System.out.println("-----doAction() end------" + zookeeper.getSessionId());
+		System.out.println("-----doAction() end------" + lock.getZookeeper().getSessionId());
 	}
 
 	/**
@@ -37,7 +45,7 @@ public class TestMyDLock {
 	public static void main(String[] args) {
 		MyDistributedLock lock = new MyDistributedLock();
 		lock.lock();
-		doAction(lock.getZookeeper());
+		doAction(lock);
 		lock.unlock();
 	}
 

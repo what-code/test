@@ -68,7 +68,7 @@ public class ZooKeeper_GetChildren_API_Sync_Usage implements Watcher {
 			zk = this.createSession(
 					"127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183", 5000, this);
 		}
-	
+		//zk.getChildren(path, watch)
 		return zk.getChildren(path, true);
 	}
 

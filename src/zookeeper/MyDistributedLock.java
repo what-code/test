@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.zookeeper.CreateMode;
@@ -39,6 +41,8 @@ public class MyDistributedLock implements Watcher{
 	private ZooKeeper zookeeper = null;
 	
 	private Integer mutex = 0;
+	
+	private AtomicLong state = new AtomicLong(0);
 	
 	//当前客户端的path
 	private volatile String curPath = null;
@@ -185,12 +189,28 @@ public class MyDistributedLock implements Watcher{
 	 * 分布式 加锁
 	 */
 	public void lock() {
-		//处理重入锁的情况(默认情况下curPath == null,重入情况下curPath != null)
 		if(this.curPath == null){
 			curPath = createNode();
 		}
 		
-		if(curPath != null){
+		//处理重入锁的情况
+		if(isHeldByCurrentClient()){
+			//重入计数
+			state.incrementAndGet();
+			return;
+		}
+		
+		if(!tryLock()){
+			try {
+				waitForLock(lowerPath);
+			} catch (KeeperException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/*if(curPath != null){
 			try {
 				List<String> list = zookeeper.getChildren(root, false);
 				lowerPath = getLowerNode(curPath,list);
@@ -204,7 +224,44 @@ public class MyDistributedLock implements Watcher{
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 
+		}*/
+	}
+	
+	protected boolean tryLock(){
+		if(curPath != null){
+			try {
+				List<String> list = zookeeper.getChildren(root, false);
+				lowerPath = getLowerNode(curPath,list);
+				if(isMinNode(curPath,list)){
+					//重入计数
+					state.incrementAndGet();
+					System.out.println("--------------get lock--------------------" + state.get());
+					return true;
+				}else{
+					return false;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
 		}
+		return false;
+	}
+	
+	/**
+	 * 当前客户端是否是锁的持有者
+	 * @return
+	 */
+	protected boolean isHeldByCurrentClient(){
+		try {
+			List<String> list = zookeeper.getChildren(root, false);
+			if(curPath != null && isMinNode(curPath,list)){
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return false;
 	}
 
 	/**
@@ -216,10 +273,13 @@ public class MyDistributedLock implements Watcher{
 		if(curPath != null){
 			Stat stat;
 			try {
-				stat = zookeeper.exists(curPath, false);
-				if(stat != null){
-					zookeeper.delete(curPath, -1);
-					System.out.println("--------------release lock--------------------");
+				System.out.println("--------------release lock--------------------" + state.get());
+				if(tryUnLock()){
+					stat = zookeeper.exists(curPath, false);
+					if(stat != null){
+						System.out.println("--------------release and delete lock --------------------");
+						zookeeper.delete(curPath, -1);
+					}
 				}
 			} catch (KeeperException e) {
 				e.printStackTrace();
@@ -227,6 +287,14 @@ public class MyDistributedLock implements Watcher{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	/**
+	 * tryUnLock
+	 * @return
+	 */
+	private boolean tryUnLock(){
+		return state.compareAndSet(0, state.decrementAndGet());
 	}
 
 	/**
@@ -238,7 +306,9 @@ public class MyDistributedLock implements Watcher{
 			System.out.println("-----get watcher notify------");
 			//某个节点(/dl_root/lock_i)被删除之后,通过watcher唤醒下一个比自己大的节点
 			synchronized (mutex) {
-				System.out.println("-----client---->"+ curPath + "-------is notify by-->" + event.getPath());
+				System.out.println("-----client---->"+ curPath + "-------is notify by-->" + event.getPath() + "--->" + state.get());
+				//重入计数
+				state.incrementAndGet();
 				mutex.notify();
 			}
 		}

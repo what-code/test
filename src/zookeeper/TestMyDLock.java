@@ -27,11 +27,13 @@ public class TestMyDLock {
 			Thread.sleep(10000 + RandomUtils.nextInt(2000));
 			
 			//测试可重入锁
-			if("/dl_root/lock_0000000056".equals(lock.getCurPath())){
+			if("/dl_root/lock_0000000075".equals(lock.getCurPath())){
 				lock.lock();
 				System.out.println("------------test Reentrant lock...");
-				Thread.sleep(1000 + RandomUtils.nextInt(2000));
+				Thread.sleep(5000 + RandomUtils.nextInt(2000));
 				lock.unlock();
+				
+				Thread.sleep(8000 + RandomUtils.nextInt(2000));
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();

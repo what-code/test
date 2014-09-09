@@ -29,6 +29,12 @@ dennis(477607151)  14:49:03
 dennis(477607151)  14:49:09
 trigger不同
 
+落秋：
+为了保证一类消息（如一笔交易三条消息：创建、付款、完成）按业务顺序严格消费，在自定义分区选择器时，按业务id与分区数量partitions.size()求余，如果消费过程中分区数量有变化，那么同一类消息就会被送往不同分区，就有可能导致消费时不按业务顺序来消费了。大家有使用其他选择器算法吗？
+dennis：
+2014/6/23 15:55:52
+这种情况，应该固定分区数
+
 
 
 3.缺少字段：OrderSeq ShareUuid  SplName  CategoryName  ShareDocid
@@ -265,12 +271,19 @@ http://taoy.stage.bang5mai.com/
 密码：izene123
 tomcat路径：/usr/local/websrv
 cap deploy
-
-
-NEW Memcache(Larry):172.16.5.194:11211 
+ 
 jvisualvm 查看JVM信息
+
 每1000ms打印一次，打印100次
 jstat -gc 29584 1000 100
+
+导出对象的统计信息
+jmap -histo 29584 > 4575.log
+jmap -dump:live,format=b,file=/home/gsj/doc/test_map.bin 2496
+
+导出线程的堆栈信息
+jstack 29584 > stack29584.log
+
 grep计数：
 grep -c "首页数据------index----" 1432.log
 
@@ -338,6 +351,7 @@ YOU：https://docs.google.com/a/b5m.com/spreadsheet/ccc?key=0Ap9Il6M9clf6dGM2dkx
 google api(通过地点获取坐标):http://maps.google.com/maps/api/geocode/json?address=上海八佰伴&sensor=false
 https://developers.google.com/maps/documentation/javascript/geocoding?hl=zh-CN
 https://developers.google.com/maps/documentation/geocoding/index?hl=zh-CN
+https://developers.google.com/maps/documentation/javascript/examples/?hl=zh-cn
 http://api.map.baidu.com/place/v2/search?&query=%E9%93%B6%E8%A1%8C&region=%E6%B5%8E%E5%8D%97&output=json&ak=60b9d75a06c0d53bf0ec47bf5b3bd773
 
 172.16.11.208:11211
@@ -345,10 +359,8 @@ http://www.bizhiyun.com/tag/19201280
 
 
 35.
-搜索结果页：class="filter-text l ml10 filter-text2 J-tip"
-内页：class="filter-text l ml10 filter-text-short J-tip"
- placeholder="酒店名、地标、商圈，支持组合搜索"
-http://jos.jd.com/
+jsp源码位置：
+tomcat安装目录\work\Catalina\localhost\项目名称目录\org\apache\jsp\manage\JSP文件目录\编译成的JAVA文件
 
 36.
 Git Setup:
@@ -380,7 +392,8 @@ Existing Git Repo?
 
 36.
 http://10.10.99.188:8888/sf1r/documents/get
-
+sf1: http://172.16.16.54:18188/#documents/search/default
+sf1 operation:in,between,starts_with,ends_with,contains
 
 37.返利相关
 
@@ -544,4 +557,51 @@ B.helloworld
 4.将执行结果从hdfs copy到本地
 ./hadoop fs -copyToLocal hdfs://localhost:9000/test/output/part-r-00000 /home/gsj/doc/doc/
 
+47.
+1.
+http://api.map.baidu.com/geocoder/v2/?output=xml&ak=60b9d75a06c0d53bf0ec47bf5b3bd773&city=上海&address=浦东南路1118号
+2.
+http://api.map.baidu.com/geocoder/v2/?ak=60b9d75a06c0d53bf0ec47bf5b3bd773&callback=renderReverse&location=31.198757820126,121.69863647867&output=xml&pois=1
+
+在看tomcat源代码，发现tomcat把很多组件都注册到jmx的mbeanserver中。我知道通过jmx，可以远程对这些组件进行监控或者操作。tomcat使用jmx的作用是不是就是为了上述目的？
+是的，还有，你自己也可以注册你自己的组件的。这样就可以在线监控，甚至是调整业务参数了。我们就经常这么干，比如在线调整log level，来查找错误。
+
+48.
+10.10.96.3:8888/sf1r/documents/search
+
+主用 IP address: p.izenesoft.com / Port: 883
+
+备用 IP address: izenesoft.cn / Port: 883
+用户名：b5mproxy 密码：B5m@PROXY
+
+48.urls
+http://netty.io/3.9/api/org/jboss/netty/channel/Channel.html
 http://www.taobaotest.com/blogs/qa?bid=13850
+oom:-XX:+HeapDumpOnOutOfMemoryError
+
+49.interrupt
+a.Thread 默认interrupt状态为false;调用interrupt()之后变为interrupt状态true;
+b.调用interrupted()返回interrupt状态的当前状态(true 或 false)，然后将interrupt状态清除,即设置为false(第二次调用interrupted()一定返回false)
+c.若Thread blocked在wait()或sleep()等方法，则其interrupt状态被清除(设置为false)
+
+50.招行 信用卡：
+http://market.cmbchina.com/ccard/2014thj2/index.html?utm_source=sina&utm_medium=weibo&utm_campaign=N37QQBC051407240
+/opt/tools/setup_files/other/mediaUnionConfig.properties
+/opt/tools/setup_files/other/counter.log
+
+nginx sh:
+/usr/sbin/nginx
+
+conf:
+/etc/nginx/nginx.conf
+
+log:
+access_log /opt/log/nginx/access.log;
+error_log /opt/log/nginx/error.log;
+
+JAVA_OPTS="-Xms1536m -Xmx1536m -Xmn1024m -XX:+UseParNewGC -XX:ParallelGCThreads=2 -XX:PermSize=128m -XX:MaxPermSize=128m"
+
+/initParam?mediaOrderParam=4426_0,759&operType=del
+/initParam?mediaOrderParam=4561_0,769
+/initParam?mediaOrderParam=4545_0,771@4546_0,765
+/ads/adexchange/mz_operation.html?ooc=false

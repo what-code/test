@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis3.ActDao">
+	<select id="selectAllAct" resultMap="detailActivity">
+		select * from t_activity_base
+	</select>
+	<resultMap id="detailActivity" type="Activity">
+		<result property="activityId" column="activity_id" />
+		<result property="activityName" column="activity_name" />
+		<result property="activityLargeImg" column="activity_large_img" />
+	</resultMap>
+</mapper>  

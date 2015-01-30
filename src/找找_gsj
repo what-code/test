@@ -77,6 +77,14 @@ mvn clean assembly:assembly -Dmaven.test.skip=true
 12.storm 日志
 grep world worker-6701.log
 
+从头开始，匹配一次：
+grep world worker-6701.log | head -n 1
+
+从尾开始，匹配一次：
+grep world worker-6701.log | tail -n 1
+
+ ps ef | grep tomcat | awk '{print $1}'
+
 152(启动nimbus的为主机，其他为从机)：
 ./storm nimbus >/dev/null 2>&1 &
 ./storm supervisor >/dev/null 2>&1 &
@@ -139,6 +147,27 @@ a.创建分支
 
 b.删除分支
 git branch -d testing
+
+c.将本地的master提交到远程的develop
+git push origin master:develop
+
+d.查看远程分支
+git branch -a
+
+e.创建远程分支
+git push origin develop
+
+f.删除远程分支
+1).删除的本地对该远程分支的track: 
+git branch -r -d origin/branch-name
+
+2).把一个空分支push到server上，相当于删除该分支
+git push origin :branch-name
+
+
+g.更新远程分支列表
+git fetch origin
+
 
 21.
 关于tomcat Session的问题通常是采用memcached，或者采用nginx_upstream_jvm_route ，他是一个 Nginx 的扩展模块，用来实现基于 Cookie 的 Session Sticky 的功能。如果tomcat过多不建议session同步，server间相互同步session很耗资源，高并发环境容易引起Session风暴。请根据自己应用情况合理采纳session解决方案。
@@ -237,6 +266,11 @@ http://10.10.99.101:7160/accounts/login/
 user:shengjie
 passwd:shengjie2wsx
 
+new pay prod:
+http://10.10.99.102:7160/deploy/projectlist
+用户：hongniu 
+密码：123456
+
 YOU 线上日志：
 10.10.99.102:logs\you
 
@@ -248,6 +282,11 @@ b5mcms/b5mcmsnLaSSJao
 
 TIAO:
 http://10.10.99.101:5552/login  tiao  tiao123 
+
+pc的pay更新方式
+stage到prod：
+http://10.10.99.106:11134/login     
+用户名/密码:pay/pay123
 
 GWM web
 Stege:
@@ -340,7 +379,7 @@ mysql 导出数据：mysqldump  -h10.10.99.135 -ub5m -pizene123  --database b5m_
 
 32 Dev branch
 git reset --hard 5d673221a804d706ccce6eb8fed4a5e4030345ef 回滚至3fac1bbd51eaed1eb5af822f1ed6e80bb26e799d版本
-
+42b44ae37bdc333d1017ec899002bdcf1ceaa0ee
 
 33.
 10.10.100.14:11211 10.10.100.19:11411 10.10.100.55:11411
@@ -387,6 +426,8 @@ Repository Setup:
   git add .
   git commit -m 'Initializing b5m_web_fanli repository'
   git remote add origin git@izenesoft.cn:b5m-web-fanli.git
+    可选：git remote rm origin
+    可选：git remote add origin git@izenesoft.cn:b5m-web-fanli.git
   git push origin master
 
 Existing Git Repo?
@@ -728,3 +769,73 @@ CREATE  TABLE `ad_sys_data`.`media_code` (
   PRIMARY KEY (`id`) );
 
 http://172.16.11.106/dubbo-admin/  root/123456
+快钱API：http://www.docin.com/p-684515090.html?qq-pf-to=pcqq.temporaryc2c
+
+53.
+B-tree:
+1.结构包括节点,前指针，后指针
+2.节点包括数据(数据内容为真实值的地址)
+3.左边的节点不包含节点本身
+
+B+tree:
+1.结构包括节点,前指针，后指针
+2.非叶子节点不包括数据，数据全部在叶子节点
+3.左节点包括的子节点包含节点本身
+4.叶子节点增加指向相邻叶子节点的指针
+
+
+54.java 证书导入
+http://www.cnblogs.com/benio/archive/2010/09/15/1826990.html
+
+cd /home/gsj/Develop_Tools/tools/jdk/jdk1.6/jdk1.6.0_43/jre/lib/security
+导入：
+keytool -import -keystore cacerts -storepass changeit -alias test_bocommca -file /home/gsj/files/bocommjava/test_root.cer
+
+查看：
+keytool -list -v -alias test_bocommca -keystore cacerts -storepass changeit
+
+删除：
+keytool -delete -alias test_bocommca -keystore cacerts -storepass changeit 
+
+
+
+55.eclipse显示git仓库属性：
+项目右键-->Team-->Share Project-->git
+
+
+
+1.交行的接入
+2.查询接口的适配，同时支持合并、块钱
+3.支付页面用HTTPS
+
+4.支付页面应该不可以回退,增加中间页,用js跳到支付页面
+5.支付UI优化
+
+1.服务器生成证书(%JAVA_HOME%/bin)
+./keytool -genkey -v -alias tomcat -keyalg RSA -keystore /home/gsj/tomcat.keystore -validity 36500
+
+2.客户端生成证书
+./keytool -genkey -v -alias mykey -keyalg RSA -storetype PKCS12 -keystore /home/gsj/mykey.p12
+双击mykey.p12文件，即可将证书导入至浏览器（客户端）
+
+3.客户端证书导出为一个单独的CER文件
+./keytool -export -alias mykey -keystore /home/gsj/mykey.p12 -storetype PKCS12 -storepass gsj123456 -rfc -file /home/gsj/mykey.cer
+gsj123456为2中的keystore密码
+
+将客户端证书导入到服务器的证书库
+./keytool -import -v -file /home/gsj/mykey.cer -keystore /home/gsj/tomcat.keystore
+
+
+4.让客户端信任服务器证书
+./keytool -keystore /home/gsj/tomcat.keystore -export -alias tomcat -file /home/gsj/tomcat.cer
+gsj123456为2中的keystore密码
+双击tomcat.cer文件，按照提示安装证书，将证书填入到"受信任的根证书颁发机构"
+
+5.list命令查看服务器的证书库
+./keytool -list -keystore /home/gsj/tomcat.keystore
+
+
+这就意味着Amazon会:
+1.用RSA公钥加密算法来区分 证书签名和交换密钥，
+2.通过RC4加密算法来加密数据，
+3.利用Md5来校验信息

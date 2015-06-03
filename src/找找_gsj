@@ -183,7 +183,33 @@ git stash apply stash@{0}
 
 k.--no-ff参数表示禁用Fast forward,用普通模式合并，合并后的历史有分支，能看出来曾经做过合并
 git merge --no-ff -m "merge with no-ff" dev
+有时git merge dev1.0(在develop上操作)会出现 dev1.0上的部分代码无法合并到develop上，此时应该用：
+git rebase dev1.0
 
+l.push tag到server
+1.push单个tag，命令格式为：git push origin [tagname]
+例如：
+git push origin v1.0 #将本地v1.0的tag推送到远端服务器
+2.push所有tag，命令格式为：git push [origin] --tags
+例如：
+git push --tags
+或
+git push origin --tags
+
+删除本地tag
+git tag -d Remote_Systems_Operation 
+用push, 删除远程tag
+git push origin :refs/tags/TEST_20150228_PDC
+
+h.强制把本地分支push到server
+git push --force origin master:master
+
+i.cherry-pick
+git cherry-pick <commit id>
+
+j.git 从某次提交创建分支
+git checkout --detach 306b24eb82744bcf67f27d4dc05a746c90e92a7d
+git checkout -b test_0603_1
 
 21.
 关于tomcat Session的问题通常是采用memcached，或者采用nginx_upstream_jvm_route ，他是一个 Nginx 的扩展模块，用来实现基于 Cookie 的 Session Sticky 的功能。如果tomcat过多不建议session同步，server间相互同步session很耗资源，高并发环境容易引起Session风暴。请根据自己应用情况合理采纳session解决方案。

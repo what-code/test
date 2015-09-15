@@ -201,20 +201,20 @@ git tag -d Remote_Systems_Operation
 用push, 删除远程tag
 git push origin :refs/tags/TEST_20150228_PDC
 
-h.强制把本地分支push到server
+m.强制把本地分支push到server
 git push --force origin master:master
 
-i.cherry-pick
+n.cherry-pick
 git cherry-pick <commit id>
 
-j.git 从某次提交创建分支
+o.git 从某次提交创建分支
 git checkout --detach 306b24eb82744bcf67f27d4dc05a746c90e92a7d
 git checkout -b test_0603_1
 
-k.gitignore
+p.gitignore
 .gitignore 参考vshw目录结构
 
-l.git push之后的undo
+q.git push之后的undo
 git revert 306b24eb82744bcf67f27d4dc05a746c90e92a7d
 https://github.com/blog/2019-how-to-undo-almost-anything-with-git
 

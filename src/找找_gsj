@@ -211,6 +211,13 @@ j.git 从某次提交创建分支
 git checkout --detach 306b24eb82744bcf67f27d4dc05a746c90e92a7d
 git checkout -b test_0603_1
 
+k.gitignore
+.gitignore 参考vshw目录结构
+
+l.git push之后的undo
+git revert 306b24eb82744bcf67f27d4dc05a746c90e92a7d
+https://github.com/blog/2019-how-to-undo-almost-anything-with-git
+
 21.
 关于tomcat Session的问题通常是采用memcached，或者采用nginx_upstream_jvm_route ，他是一个 Nginx 的扩展模块，用来实现基于 Cookie 的 Session Sticky 的功能。如果tomcat过多不建议session同步，server间相互同步session很耗资源，高并发环境容易引起Session风暴。请根据自己应用情况合理采纳session解决方案。
 
